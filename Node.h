@@ -17,7 +17,9 @@ public:
     void connectInputToState(string,Node*);
     string removeConnectionToState(string);
     Node* convertAsterisk();
-    string deParanthesisIfier(string a);
+    string deParanthesisIfier(string);
+    void convert();
+    int levelSlashSearch(string);
 };
 
 

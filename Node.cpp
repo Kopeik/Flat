@@ -14,7 +14,7 @@ Node::Node(int a)
         goToStates[i]= nullptr;
     }
 }
-
+int jumpParantheses()
 string Node::removeConnectionToState(string a) {
     bool ok=false;
 for(int i=0;goToStates[i]!= nullptr;i++)
@@ -42,7 +42,6 @@ void Node::connectInputToState(string a,Node* theNode)
     goToStates[i]=theNode;
     stateInputs[i]=a;
 }
-
 string Node::deParanthesisIfier(string a) {
     bool ok=false;
    while(a[0]=='('&&a[a.length()-1]==')')
@@ -57,4 +56,30 @@ string Node::deParanthesisIfier(string a) {
        cout<<"Didn't need to deparenthesisify string "<<a<<endl;
    }
    return a;
+}
+
+void Node::convert() {
+    bool ok=false;
+    int i=0;
+    while (ok==false)
+    {
+        ok=true;
+        if(stateInputs[i].length()>1) {
+            ok = false;
+
+        }
+
+    }
+
+
+}
+
+int Node::levelSlashSearch(string a) {
+    int i=0;
+
+    while(i<a.length())
+    {
+        if
+    }
+
 }
