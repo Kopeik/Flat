@@ -20,6 +20,7 @@ public:
     string deParanthesisIfier(string);
     void convert();
     int levelSlashSearch(string);
+    void slash_convertInput(int index,int slIndex);
 };
 
 

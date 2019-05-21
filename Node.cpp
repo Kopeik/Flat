@@ -14,7 +14,10 @@ Node::Node(int a)
         goToStates[i]= nullptr;
     }
 }
-int jumpParantheses()
+exception RegexIncorrect()
+{
+    cout<<"Sorry!The regex you inputed was incorrect.";
+}
 string Node::removeConnectionToState(string a) {
     bool ok=false;
 for(int i=0;goToStates[i]!= nullptr;i++)
@@ -66,6 +69,18 @@ void Node::convert() {
         ok=true;
         if(stateInputs[i].length()>1) {
             ok = false;
+            int splitter=levelSlashSearch(stateInputs[i]);
+            if(splitter==0)
+            {
+                cout<<"Something went wrong. Splitting at very beginning in: "<<stateInputs[i];
+                throw RegexIncorrect();
+
+            }
+            if(splitter!=-1)
+            {
+
+            }
+
 
         }
 
@@ -76,10 +91,27 @@ void Node::convert() {
 
 int Node::levelSlashSearch(string a) {
     int i=0;
+    int open=0;
 
+    if(a[0]==')' or a[0]=='/' or a[0]=='*' )
+        throw RegexIncorrect();
     while(i<a.length())
     {
-        if
+        if(a[i]=='(')
+            open++;
+        if(a[i]==')')
+            open--;
+        if(a[i]=='/')
+            if(open==0)
+                return i;
+            i++;
     }
+    return -1;
+
+}
+
+void Node::slash_convertInput(int index, int slIndex) {
+
+
 
 }
