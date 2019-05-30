@@ -8,6 +8,7 @@
 
 class Tree {
 public:
+
     Node* startingState;
     Node* finalState;
     string terminals;

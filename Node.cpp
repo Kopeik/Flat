@@ -4,11 +4,12 @@
 
 #include <iostream>
 #include "Node.h"
+#include <string.h>
+#include <string>
 Node::Node(int a)
 {
     value=a;
-    isStartingState= false;
-    isFinalState=false;
+
     for(int i=0;i<50;i++)
     {
         goToStates[i]= nullptr;
@@ -63,32 +64,59 @@ string Node::deParanthesisIfier(string a) {
 
 void Node::convert() {
     bool ok=false;
-    int i=0;
     while (ok==false)
     {
         ok=true;
-        if(stateInputs[i].length()>1) {
-            ok = false;
-            int splitter=levelSlashSearch(stateInputs[i]);
-            if(splitter==0)
-            {
-                cout<<"Something went wrong. Splitting at very beginning in: "<<stateInputs[i];
-                throw RegexIncorrect();
+        for(int i=0;stateInputs[i]!="";i++)
+        {
+            if(stateInputs[i].length()>1) {
+                ok = false;
+                int splitter = levelSlashSearch(stateInputs[i]);
 
+                if (splitter != -1) {
+                    if (splitter == 0) {
+                        cout << "Something went wrong. Splitting at very beginning in: " << stateInputs[i];
+                        throw RegexIncorrect();
+                    } else {
+
+                        string left = stateInputs[i].substr(0, splitter);
+                        string right = stateInputs[i].substr(splitter + 1, stateInputs[i].length() - splitter);
+                        cout << "Splitted " << stateInputs[i] << " into " << left << " and " << right << endl;
+                        stateInputs[i] = deParanthesisIfier(left);
+                        connectInputToState(deParanthesisIfier(right), goToStates[i]);
+                    }
+                } else {
+                    int splitconc = concatenationSearch(stateInputs[i]);
+                    if (splitconc != -1) {
+                        string left = stateInputs[i].substr(0, splitconc + 1);
+                        string right = stateInputs[i].substr(splitconc + 1, stateInputs[i].length() - splitconc);
+                        cout << "Splitted " << stateInputs[i] << " into " << left << " and " << right << endl;
+                        Node *ne = new Node(value + 1);
+                        ne->connectInputToState(deParanthesisIfier(right), goToStates[i]);
+                        removeConnectionToState(stateInputs[i]);
+                        connectInputToState(deParanthesisIfier(left), ne);
+                    }
+                    else
+                    {
+                        if(stateInputs[i][stateInputs[i].length()-1]=='*')
+                        {
+                            string toCon=deParanthesisIfier(   stateInputs[i].substr(0,stateInputs[i].length()-1));
+                            connectInputToState(toCon,this);
+                            connectInputToState(toCon,goToStates[i]);
+                            removeConnectionToState(stateInputs[i]);
+
+                        }
+                    }
+                }
             }
-            if(splitter!=-1)
-            {
-
-            }
-
-
         }
-
     }
-
-
+    for(int i=0;i<50;i++)
+    {
+        if(goToStates[i]!= nullptr)
+        goToStates[i]->convert();
+    }
 }
-
 int Node::levelSlashSearch(string a) {
     int i=0;
     int open=0;
@@ -109,9 +137,23 @@ int Node::levelSlashSearch(string a) {
     return -1;
 
 }
+int Node::concatenationSearch(string a) {
+    int i=0;
+    int open=0;
 
-void Node::slash_convertInput(int index, int slIndex) {
-
-
-
+    if(a[0]==')' or a[0]=='/' or a[0]=='*' )
+        throw RegexIncorrect();
+    while(i<a.length()-1)
+    {
+        if(a[i]=='(')
+            open++;
+        if(a[i]==')')
+            open--;
+        if(isalnum(a[i])or a[i]==')')
+            if(open==0)
+                if(isalnum(a[i+1]) or a[i+1]=='(')
+                    return i;
+        i++;
+    }
+    return -1;
 }

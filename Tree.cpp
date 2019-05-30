@@ -6,6 +6,7 @@
 #include "Tree.h"
 Tree::Tree(string a)
 {
+
     startingState=createNode(1);
     finalState=createNode(99999);
     cout<<"Reached this point in creating tree. Length of string "<<a<<" is "<<a.length()<<"\n";
@@ -15,6 +16,8 @@ Tree::Tree(string a)
 
         a=startingState->deParanthesisIfier(a);
         startingState->connectInputToState(a,finalState);
+    startingState->convert();
+
 
 
 }
